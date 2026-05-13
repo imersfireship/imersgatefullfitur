@@ -42,13 +42,16 @@
             -webkit-text-fill-color: #F5F5F5 !important;
         }
 
+        /* Checkbox styling */
         .custom-checkbox { accent-color: #FF6A00; width: 1.1rem; height: 1.1rem; cursor: pointer; }
+        
+        /* Custom Color Picker Input Styling */
         input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
         input[type="color"]::-webkit-color-swatch { border: none; border-radius: 4px; }
+
+        /* Sembunyikan scrollbar di mobile navbar biar estetik */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .toggle-checkbox:checked { right: 0; border-color: #FF6A00; }
-        .toggle-checkbox:checked + .toggle-label { background-color: #FF6A00; }
 
         /* KUNCI HTML RESPONSIVE */
         #view-product-content * {
@@ -69,6 +72,10 @@
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
+        
+        /* Toggle Switch Custom */
+        .toggle-checkbox:checked { right: 0; border-color: #FF6A00; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #FF6A00; }
 
         /* CSS KHUSUS UNTUK KONTEN DINAMIS DARI APP_MENU */
         .imers-grid {
@@ -221,7 +228,7 @@
         <!-- SIDEBAR BACKDROP FOR MOBILE -->
         <div id="sidebar-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-20 hidden lg:hidden" onclick="toggleSidebar()"></div>
 
-        <!-- SIDEBAR (Hanya tampil di Laptop/PC) -->
+        <!-- SIDEBAR -->
         <aside id="sidebar" class="w-64 bg-dark border-r border-borderMain flex flex-col transition-transform duration-300 z-30 fixed inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 lg:static h-full">
             <div class="h-16 flex items-center justify-between px-6 border-b border-borderMain bg-card/50 flex-shrink-0">
                 <div class="flex items-center overflow-hidden">
@@ -705,6 +712,11 @@
                     <input type="url" id="new-product-image" placeholder="https://example.com/image.jpg" class="w-full px-4 py-2 bg-dark border border-borderMain text-textMain rounded-lg focus:ring-2 focus:ring-primary outline-none">
                 </div>
                 <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1">URL Salespage Master (Opsional)</label>
+                    <input type="url" id="new-product-salespage" placeholder="https://domainlu.com/lp/ecourse" class="w-full px-4 py-2 bg-dark border border-borderMain text-textMain rounded-lg focus:ring-2 focus:ring-primary outline-none">
+                    <p class="text-xs text-gray-500 mt-1">Sistem akan menambahkan <code class="text-primary">?ref=ID_AGENCY</code> saat disalin oleh agency.</p>
+                </div>
+                <div>
                     <label class="block text-sm font-medium text-gray-300 mb-1">Konten Akses (Dukung HTML / Link Download)</label>
                     <textarea id="new-product-content" rows="4" placeholder="Contoh: <a href='https://link.com'>Download Materi Disini</a>" class="w-full px-4 py-2 bg-dark border border-borderMain text-textMain rounded-lg focus:ring-2 focus:ring-primary outline-none font-mono text-sm"></textarea>
                     <p class="text-xs text-gray-500 mt-1">Gunakan tag HTML standar untuk link atau teks tebal.</p>
@@ -734,6 +746,10 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-1">URL Gambar Cover</label>
                     <input type="url" id="edit-product-image" class="w-full px-4 py-2 bg-dark border border-borderMain text-textMain rounded-lg focus:ring-2 focus:ring-primary outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1">URL Salespage Master (Opsional)</label>
+                    <input type="url" id="edit-product-salespage" class="w-full px-4 py-2 bg-dark border border-borderMain text-textMain rounded-lg focus:ring-2 focus:ring-primary outline-none">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-1">Konten Akses (HTML)</label>
@@ -770,6 +786,10 @@
 
     <!-- FRONTEND LOGIC -->
     <script>
+        // ========================================================
+        // URL WEB APP APPS SCRIPT ANDA
+        // PASTIKAN MENGGUNAKAN URL DARI "NEW DEPLOYMENT"
+        // ========================================================
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaG9u14IqeA7DOw1rlyoCUeK8t_XzOTyTRqWsgjiPcREVxIH7K8jeqgfA-RgAZ7hSVTg/exec'; 
 
         let appState = { user: null, products: [], agencies: [], allProducts: [], settings: {}, dynamicMenus: [] };
@@ -808,6 +828,7 @@
             let appUrl = appState.settings.appUrl || 'https://demoimersgate.vercel.app';
             let brandName = appState.settings.brandName || 'iMersGate';
             let senderName = appState.user.name;
+            
             let passText = password ? password : "(Sesuai password awal / Gunakan fitur Lupa Password)";
             
             let msg = `🚀 *Halo ${name},*\nAkun Anda telah berhasil dibuat dan sudah aktif!\n\n🔑 *Detail Akses:*\nEmail: ${email}\nPassword: ${passText}\nLink Login: ${appUrl}\n\n⚠️ *PENTING:*\nIni adalah password temporary (sementara). Demi kenyamanan dan privacy Anda, diwajibkan untuk segera update/ganti password ini di menu Pengaturan Akun di dalam member area setelah berhasil login.\n\n*Terima Kasih,*\n*-- ${senderName} | Official Partner ${brandName}*`;
@@ -815,6 +836,44 @@
             let waLink = `https://wa.me/${formatWaNumber(phone)}?text=${encodeURIComponent(msg)}`;
             window.open(waLink, '_blank');
         }
+
+        // --- COPY SALESPAGE LINK LOGIC ---
+        function copySalespageLink(masterUrl) {
+            if(!masterUrl || masterUrl === 'undefined' || masterUrl === '') { 
+                showToast('Error', 'Link salespage belum diset oleh Admin.', true); 
+                return; 
+            }
+            
+            const separator = masterUrl.includes('?') ? '&' : '?';
+            const finalUrl = `${masterUrl}${separator}ref=${appState.user.id}`;
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(finalUrl).then(() => {
+                    showToast('Sukses', 'Link promosi berhasil disalin!');
+                }).catch(err => {
+                    fallbackCopyTextToClipboard(finalUrl);
+                });
+            } else {
+                fallbackCopyTextToClipboard(finalUrl);
+            }
+        }
+
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast('Sukses', 'Link promosi berhasil disalin!');
+            } catch (err) {
+                showToast('Error', 'Gagal menyalin link.', true);
+            }
+            document.body.removeChild(textArea);
+        }
+        // ---------------------------------
 
         async function callBackend(action, payload = {}) {
             try {
@@ -1317,7 +1376,10 @@
                             </div>
                             <div class="mt-4 pt-4 border-t border-borderMain flex justify-between items-center">
                                 <span class="text-[10px] sm:text-xs font-medium px-2 py-1 bg-primary/10 text-primary rounded">Active</span>
-                                <button onclick="viewProductContent('${p.id}')" class="text-primary text-xs sm:text-sm font-medium hover:text-primaryHover bg-dark px-3 py-1.5 rounded-lg border border-borderMain transition-colors flex items-center">Akses <i data-lucide="arrow-right" class="w-3 h-3 sm:w-4 sm:h-4 ml-1"></i></button>
+                                <div class="flex space-x-2">
+                                    ${p.salespageUrl ? `<button onclick="copySalespageLink('${p.salespageUrl}')" title="Copy Link Promosi" class="text-gray-400 hover:text-primary bg-dark px-3 py-1.5 rounded-lg border border-borderMain transition-colors flex items-center"><i data-lucide="link" class="w-4 h-4"></i></button>` : ''}
+                                    <button onclick="viewProductContent('${p.id}')" class="text-primary text-xs sm:text-sm font-medium hover:text-primaryHover bg-dark px-3 py-1.5 rounded-lg border border-borderMain transition-colors flex items-center">Akses <i data-lucide="arrow-right" class="w-3 h-3 sm:w-4 sm:h-4 ml-1"></i></button>
+                                </div>
                             </div>
                         </div>
                     </div>`).join('');
@@ -1596,6 +1658,7 @@
             const payload = { 
                 name: document.getElementById('new-product-name').value,
                 imageUrl: document.getElementById('new-product-image').value,
+                salespageUrl: document.getElementById('new-product-salespage').value,
                 accessContent: document.getElementById('new-product-content').value 
             };
 
@@ -1618,6 +1681,7 @@
             document.getElementById('edit-product-id').value = product.id;
             document.getElementById('edit-product-name').value = product.name;
             document.getElementById('edit-product-image').value = product.imageUrl || '';
+            document.getElementById('edit-product-salespage').value = product.salespageUrl || '';
             document.getElementById('edit-product-content').value = product.accessContent || '';
             openModal('modal-edit-product');
         }
@@ -1632,6 +1696,7 @@
             const payload = { 
                 name: document.getElementById('edit-product-name').value,
                 imageUrl: document.getElementById('edit-product-image').value,
+                salespageUrl: document.getElementById('edit-product-salespage').value,
                 accessContent: document.getElementById('edit-product-content').value 
             };
 
