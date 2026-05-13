@@ -478,7 +478,7 @@
                     </div>
                 </div>
 
-                <!-- ACCOUNT VIEW -->
+                <!-- ACCOUNT VIEW (with Bank Details) -->
                 <div id="view-account" class="view-section hidden fade-in">
                     <div class="mb-4 sm:mb-6">
                         <h3 class="text-lg font-bold text-textMain">Pengaturan Akun</h3>
@@ -817,26 +817,6 @@
         }
         // ------------------------------
 
-        function formatWaNumber(phone) {
-            let p = String(phone).replace(/\D/g, '');
-            if (p.startsWith('0')) p = '62' + p.substring(1);
-            if (p.startsWith('8')) p = '62' + p;
-            return p;
-        }
-
-        function sendManualWa(name, email, phone, password = null) {
-            let appUrl = appState.settings.appUrl || 'https://demoimersgate.vercel.app';
-            let brandName = appState.settings.brandName || 'iMersGate';
-            let senderName = appState.user.name;
-            
-            let passText = password ? password : "(Sesuai password awal / Gunakan fitur Lupa Password)";
-            
-            let msg = `🚀 *Halo ${name},*\nAkun Anda telah berhasil dibuat dan sudah aktif!\n\n🔑 *Detail Akses:*\nEmail: ${email}\nPassword: ${passText}\nLink Login: ${appUrl}\n\n⚠️ *PENTING:*\nIni adalah password temporary (sementara). Demi kenyamanan dan privacy Anda, diwajibkan untuk segera update/ganti password ini di menu Pengaturan Akun di dalam member area setelah berhasil login.\n\n*Terima Kasih,*\n*-- ${senderName} | Official Partner ${brandName}*`;
-            
-            let waLink = `https://wa.me/${formatWaNumber(phone)}?text=${encodeURIComponent(msg)}`;
-            window.open(waLink, '_blank');
-        }
-
         // --- COPY SALESPAGE LINK LOGIC ---
         function copySalespageLink(masterUrl) {
             if(!masterUrl || masterUrl === 'undefined' || masterUrl === '') { 
@@ -874,6 +854,26 @@
             document.body.removeChild(textArea);
         }
         // ---------------------------------
+
+        function formatWaNumber(phone) {
+            let p = String(phone).replace(/\D/g, '');
+            if (p.startsWith('0')) p = '62' + p.substring(1);
+            if (p.startsWith('8')) p = '62' + p;
+            return p;
+        }
+
+        function sendManualWa(name, email, phone, password = null) {
+            let appUrl = appState.settings.appUrl || 'https://demoimersgate.vercel.app';
+            let brandName = appState.settings.brandName || 'iMersGate';
+            let senderName = appState.user.name;
+            
+            let passText = password ? password : "(Sesuai password awal / Gunakan fitur Lupa Password)";
+            
+            let msg = `🚀 *Halo ${name},*\nAkun Anda telah berhasil dibuat dan sudah aktif!\n\n🔑 *Detail Akses:*\nEmail: ${email}\nPassword: ${passText}\nLink Login: ${appUrl}\n\n⚠️ *PENTING:*\nIni adalah password temporary (sementara). Demi kenyamanan dan privacy Anda, diwajibkan untuk segera update/ganti password ini di menu Pengaturan Akun di dalam member area setelah berhasil login.\n\n*Terima Kasih,*\n*-- ${senderName} | Official Partner ${brandName}*`;
+            
+            let waLink = `https://wa.me/${formatWaNumber(phone)}?text=${encodeURIComponent(msg)}`;
+            window.open(waLink, '_blank');
+        }
 
         async function callBackend(action, payload = {}) {
             try {
@@ -913,7 +913,7 @@
                 if(appState.user.role === 'admin') {
                     appState.allProducts = data.products;
                 } else {
-                    appState.allProducts = appState.products;
+                    appState.allProducts = appState.products; // Agency hanya bisa berikan produk yang dimilikinya
                 }
                 
                 if (appState.settings) {
@@ -934,7 +934,7 @@
                 document.getElementById('profile-email').value = appState.user.email || '';
                 document.getElementById('profile-phone').value = appState.user.phone || '';
                 
-                // MENGISI DATA REKENING DARI BACKEND
+                // MENGISI DATA REKENING
                 document.getElementById('profile-bank-name').value = appState.user.bank_name || '';
                 document.getElementById('profile-bank-account').value = appState.user.bank_account || '';
                 document.getElementById('profile-bank-owner').value = appState.user.bank_owner || '';
@@ -965,6 +965,9 @@
                 if (err.message === "UNAUTHORIZED_ACCESS" || err.message.includes("tidak ditemukan") || err.message.includes("Failed to fetch") || err.message.includes("Unexpected token")) {
                     localStorage.removeItem('imersgate_user');
                     document.getElementById('login-view').classList.remove('hidden');
+                    if(err.message.includes("fetch") || err.message.includes("token")) {
+                        showToast('Error', 'Gagal memuat. Pastikan URL Apps Script benar.', true);
+                    }
                 } else {
                     document.getElementById('error-view').classList.remove('hidden');
                     document.getElementById('error-message').innerText = err.message;
@@ -1146,7 +1149,7 @@
             const oldPass = document.getElementById('profile-old-password').value;
             const newPass = document.getElementById('profile-new-password').value;
 
-            // AMBIL DATA REKENING BARU
+            // DATA REKENING
             const bankName = document.getElementById('profile-bank-name').value;
             const bankAccount = document.getElementById('profile-bank-account').value;
             const bankOwner = document.getElementById('profile-bank-owner').value;
@@ -1260,6 +1263,15 @@
             }
             addNavItems('Akun Saya', 'user', 'account', false);
 
+            const createBtnContainer = document.createElement('div');
+            createBtnContainer.className = 'mt-6 px-4 hidden lg:block';
+            createBtnContainer.innerHTML = `
+                <button onclick="openCreateAgencyModal()" class="w-full bg-primary hover:bg-primaryHover text-white py-2.5 rounded-lg text-sm font-medium flex items-center justify-center transition-colors shadow-lg shadow-primary/20">
+                    <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i> New Agency
+                </button>
+            `;
+            navMenu.appendChild(createBtnContainer);
+            
             lucide.createIcons();
             renderDashboard();
             renderAgenciesTable();
@@ -1274,7 +1286,7 @@
             a.onclick = (e) => {
                 e.preventDefault();
                 switchView(viewId);
-                closeSidebar(); 
+                closeSidebar();
             };
             return a;
         }
@@ -1294,7 +1306,6 @@
 
         function switchView(viewId) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-            
             const targetView = document.getElementById(`view-${viewId}`);
             if(targetView) targetView.classList.remove('hidden');
 
@@ -1306,7 +1317,6 @@
             } else if (viewId === 'dashboard') {
                 title = 'Dashboard';
             }
-
             document.getElementById('page-title').innerText = title;
 
             document.querySelectorAll('#nav-menu a[id^="desktop-nav-"]').forEach(el => {
@@ -1325,24 +1335,13 @@
         function renderDashboard() {
             const statsHtml = `
                 <div class="bg-card p-4 sm:p-6 rounded-xl shadow-lg border border-borderMain flex items-center">
-                    <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-4 flex-shrink-0">
-                        <i data-lucide="package" class="w-6 h-6 text-primary"></i>
-                    </div>
-                    <div class="overflow-hidden">
-                        <p class="text-xs sm:text-sm text-gray-400 font-medium truncate">My Products</p>
-                        <h4 class="text-xl sm:text-2xl font-bold text-textMain">${appState.products.length}</h4>
-                    </div>
+                    <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-4 flex-shrink-0"><i data-lucide="package" class="w-6 h-6 text-primary"></i></div>
+                    <div class="overflow-hidden"><p class="text-xs sm:text-sm text-gray-400 font-medium truncate">My Products</p><h4 class="text-xl sm:text-2xl font-bold text-textMain">${appState.products.length}</h4></div>
                 </div>
                 <div class="bg-card p-4 sm:p-6 rounded-xl shadow-lg border border-borderMain flex items-center">
-                    <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-4 flex-shrink-0">
-                        <i data-lucide="users" class="w-6 h-6 text-primary"></i>
-                    </div>
-                    <div class="overflow-hidden">
-                        <p class="text-xs sm:text-sm text-gray-400 font-medium truncate">Agency Bawahan</p>
-                        <h4 class="text-xl sm:text-2xl font-bold text-textMain">${appState.agencies.length}</h4>
-                    </div>
-                </div>
-            `;
+                    <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-4 flex-shrink-0"><i data-lucide="users" class="w-6 h-6 text-primary"></i></div>
+                    <div class="overflow-hidden"><p class="text-xs sm:text-sm text-gray-400 font-medium truncate">Agency Bawahan</p><h4 class="text-xl sm:text-2xl font-bold text-textMain">${appState.agencies.length}</h4></div>
+                </div>`;
             document.getElementById('stats-container').innerHTML = statsHtml;
 
             const grid = document.getElementById('products-grid');
