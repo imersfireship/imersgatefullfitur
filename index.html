@@ -1175,7 +1175,18 @@
                     qrisUrl
                 });
                 showToast('Sukses', 'Profil berhasil diperbarui.');
+                
+                // UPDATE STATE DI FRONTEND
                 appState.user.name = newName;
+                appState.user.phone = newPhone;
+                appState.user.bank_name = bankName;
+                appState.user.bank_account = bankAccount;
+                appState.user.bank_owner = bankOwner;
+                appState.user.qris_url = qrisUrl;
+                
+                // SIMPAN KE LOCALSTORAGE AGAR TIDAK HILANG SAAT REFRESH
+                localStorage.setItem('imersgate_user', JSON.stringify(appState.user));
+
                 document.getElementById('user-name').innerText = newName;
                 document.getElementById('user-avatar').innerText = newName.charAt(0).toUpperCase();
                 document.getElementById('profile-old-password').value = '';
