@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Poppins:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Reseller Right DigitalBox</title>
+  <meta name="description" content="Dummy landing page reseller right produk digital dengan tema neon glassmorphism." />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', 'Poppins', 'Montserrat', Arial, sans-serif;
+      color: #f8fafc;
+      background:
+        radial-gradient(circle at top left, rgba(168,85,247,0.25), transparent 30%),
+        radial-gradient(circle at top right, rgba(249,115,22,0.20), transparent 30%),
+        radial-gradient(circle at bottom center, rgba(56,189,248,0.20), transparent 35%),
+        #070812;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .hero {
+      min-height: 100vh;
+      padding: 40px 7%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(236,72,153,0.25), transparent 30%),
+        radial-gradient(circle at 85% 20%, rgba(59,130,246,0.22), transparent 32%),
+        linear-gradient(135deg,#090014,#0b1025,#140018);
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 80px;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+    }
+
+    .logo span {
+      background: linear-gradient(90deg,#fb923c,#ec4899,#38bdf8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .nav-pill {
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(14px);
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+      background: rgba(251,146,60,0.12);
+      color: #fdba74;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    h1 {
+      font-size: clamp(44px,7vw,84px);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+      margin-bottom: 24px;
+    }
+
+    .gradient {
+      background: linear-gradient(90deg,#38bdf8,#a855f7,#ec4899,#fb923c);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      color: #cbd5e1;
+      font-size: 20px;
+      max-width: 620px;
+      margin-bottom: 34px;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 16px 26px;
+      border-radius: 18px;
+      font-weight: 800;
+      transition: .3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg,#fb923c,#ec4899,#7c3aed);
+      box-shadow: 0 20px 60px rgba(236,72,153,0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-4px);
+    }
+
+    .btn-secondary {
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      color: #e2e8f0;
+    }
+
+    .glass-card {
+      border-radius: 34px;
+      padding: 30px;
+      background:
+        linear-gradient(145deg, rgba(168,85,247,0.15), rgba(56,189,248,0.08), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+    }
+
+    .mockup {
+      aspect-ratio: 1 / 1;
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 900;
+      text-align: center;
+      background:
+        radial-gradient(circle at top left, rgba(236,72,153,0.30), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(56,189,248,0.30), transparent 30%),
+        rgba(255,255,255,0.04);
+    }
+
+    section {
+      padding: 90px 7%;
+    }
+
+    .section-title {
+      font-size: clamp(36px,5vw,60px);
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg,#38bdf8,#a855f7,#ec4899,#fb923c);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .section-copy {
+      max-width: 760px;
+      color: #cbd5e1;
+      margin-bottom: 40px;
+      font-size: 18px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 22px;
+    }
+
+    .card {
+      padding: 28px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(14px);
+    }
+
+    .card h3 {
+      margin-bottom: 12px;
+      font-size: 24px;
+      background: linear-gradient(90deg,#38bdf8,#ec4899,#fb923c);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .card p {
+      color: #94a3b8;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 18px;
+      margin-top: 40px;
+    }
+
+    .step {
+      padding: 24px;
+      border-radius: 24px;
+      background: rgba(15,23,42,0.8);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-weight: 900;
+      background: linear-gradient(135deg,#38bdf8,#8b5cf6,#ec4899);
+    }
+
+    .step h4 {
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+
+    .step p {
+      color: #94a3b8;
+      font-size: 15px;
+    }
+
+    .cta-box {
+      text-align: center;
+      border-radius: 40px;
+      padding: 60px 30px;
+      background:
+        radial-gradient(circle at top center, rgba(236,72,153,0.25), transparent 35%),
+        rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    footer {
+      padding: 40px 7%;
+      text-align: center;
+      color: #64748b;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    @media(max-width:900px){
+      .hero-grid,
+      .grid-3,
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 24px 5% 70px;
+      }
+
+      section {
+        padding: 70px 5%;
+      }
+
+      h1 {
+        font-size: 52px;
+      }
+    }
+
+    @media(max-width:560px){
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .hero p,
+      .section-copy {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="navbar">
+      <div class="logo">Digital<span>Box</span></div>
+      <div class="nav-pill">Dummy Reseller Right</div>
+    </nav>
+
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">⚡ Produk dummy untuk testing landing page</div>
+
+        <h1>
+          Jual Produk Digital <span class="gradient">Tanpa Ribet Bikin Sistem</span>
+        </h1>
+
+        <p>
+          Dummy landing page reseller right dengan gaya neon glassmorphism modern. Cocok buat testing produk digital, template, tools, atau ecosystem reseller.
+        </p>
+
+        <div class="cta-group">
+          <a href="#join" class="btn btn-primary">Gabung Sekarang</a>
+          <a href="#fitur" class="btn btn-secondary">Lihat Fitur</a>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <div class="mockup">
+          DIGITALBOX<br>RESELLER RIGHT
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="fitur">
+    <h2 class="section-title">Semua Sudah Disiapkan.</h2>
+    <p class="section-copy">
+      Tinggal fokus jualan dan bangun distribusi. Produk, visual, dan alur marketing sudah dibuat supaya lo nggak mulai dari nol.
+    </p>
+
+    <div class="grid-3">
+      <div class="card">
+        <h3>Produk Siap Jual</h3>
+        <p>Template, tools, mini course, dan file digital dummy siap dipasarkan ulang.</p>
+      </div>
+
+      <div class="card">
+        <h3>Marketing Kit</h3>
+        <p>Caption, banner, dan materi promosi sudah tersedia untuk testing campaign.</p>
+      </div>
+
+      <div class="card">
+        <h3>Support System</h3>
+        <p>Semua pembeli masuk ke ecosystem support yang sama supaya sistem tetap rapi.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Cara Sistemnya Jalan</h2>
+    <p class="section-copy">
+      Simple. Masuk → jual → pembeli ikut sistem → distribusi terus berjalan.
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h4>Masuk Sistem</h4>
+        <p>Dapat akses dashboard, produk, dan marketing kit.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <h4>Mulai Promosi</h4>
+        <p>Gunakan materi promosi yang sudah disediakan.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <h4>Pembeli Ikut</h4>
+        <p>Pembeli juga mendapatkan akses sistem reseller yang sama.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">4</div>
+        <h4>Distribusi Jalan</h4>
+        <p>Sistem tetap bergerak tanpa bikin semuanya manual.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="join">
+    <div class="cta-box">
+      <h2 class="section-title">Bukan Sekadar Produk. Tapi Sistem Distribusi.</h2>
+
+      <p class="section-copy" style="margin-left:auto;margin-right:auto;">
+        Landing page dummy ini bisa lo pakai buat inspirasi design reseller right modern dengan style neon premium.
+      </p>
+
+      <div class="cta-group" style="justify-content:center;">
+        <a href="#" class="btn btn-primary">Beli Sekarang</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 DigitalBox Dummy Ecosystem • Design Neon Glassmorphism
+  </footer>
+
+</body>
+</html>
